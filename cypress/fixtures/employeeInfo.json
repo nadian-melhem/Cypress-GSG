@@ -1,0 +1,14 @@
+{
+    "loginUser": "Admin",
+    "loginPassword": "admin123",
+    "firstName": "nadian",
+    "middleName": "nazieh",
+    "lastName": "melhem",
+    "userName": "testUser",
+    "password": "test123456",
+    "empNumber": 237,
+    "status": true,
+    "userRoleId": 2,
+    "usernameForApi": "test22"
+
+}
