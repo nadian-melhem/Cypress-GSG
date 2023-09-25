@@ -9,7 +9,6 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 })
 
 describe("Add new employee", () => {
-    let id;
     const loginPageObj: LoginHomePage = new LoginHomePage();
     const addEmployeePageObj: AddEmployeePage = new AddEmployeePage();
     const employeeListPageObj: EmployeeListPage = new EmployeeListPage();
@@ -40,26 +39,24 @@ describe("Add new employee", () => {
     })
 
 
-    it.only('check if the added employee exists', () => {
+    it('check if the added employee exists', () => {
         cy.get("@empInfo").then((employeeData: any) => {
             cy.request({
                 method: 'Post',
                 url: 'web/index.php/api/v2/pim/employees',
                 body: {
-                    firstName: "test4",
-                    middleName: "",
-                    lastName: "dzz",
-                    empPicture: null,
-                    employeeId: "78"
+                    firstName: employeeData.firstName,
+                    middleName: employeeData.middleName,
+                    lastName: employeeData.lastName,
+                    empPicture: employeeData.empPicture,
+                    employeeId: employeeData.empId
                 }
 
             }).then((response) => {
                 expect(response).property('status').to.equal(200)
-                console.log(response.body)
-                id = response.body.data.employeeId
                 dashboardPageObj.openPimPage()
-                employeeListPageObj.searchForEmployee(id)
-                employeeListPageObj.checkTableResults(id)
+                employeeListPageObj.searchForEmployee(response.body.data.employeeId)
+                employeeListPageObj.checkTableResults(response.body.data.employeeId)
             })
             })
 
