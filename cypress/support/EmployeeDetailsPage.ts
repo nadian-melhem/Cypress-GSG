@@ -5,7 +5,7 @@ class EmployeeDetailsPage{
         todayButton: () => cy.get(".oxd-date-input-links").eq(1),
         nationality: () => cy.get(':nth-child(5) > :nth-child(1) > :nth-child(1) > .oxd-input-group > :nth-child(2) > .oxd-select-wrapper > .oxd-select-text > .oxd-select-text-input'),
         nationalityListItems: () => cy.get('.oxd-select-dropdown'),
-        smokerCheckBox: () => cy.get('[type="checkbox"]'),
+        smokerCheckBox: () => cy.get('[type="checkbox"]').eq(0),
         saveDetails: () =>cy.get(':nth-child(1) > .oxd-form > .oxd-form-actions > .oxd-button'),
     }
 
@@ -20,9 +20,8 @@ class EmployeeDetailsPage{
 
     insertPersonalDetails(birthDate: string, nationality: string, isSmoker: boolean){
         this.elements.birthDate().type(birthDate)
-       // this.elements.nationality().focus().click()
-       //this.elements.nationalityListItems().children().eq(3).focus().click()
-       // this.elements.smokerCheckBox().check()
+        //this.elements.nationality().click({force: true})
+        this.elements.smokerCheckBox().check({force: true})
 
     }
 
