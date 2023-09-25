@@ -18,8 +18,8 @@ class EmployeeDetailsPage{
         cy.get(".--strong").should('contain',firstName+' '+lastName)
     }
 
-    insertPersonalDetails(){
-        this.elements.birthDate().type("2019-07-12")
+    insertPersonalDetails(birthDate: string, nationality: string, isSmoker: boolean){
+        this.elements.birthDate().type(birthDate)
        // this.elements.nationality().focus().click()
        //this.elements.nationalityListItems().children().eq(3).focus().click()
        // this.elements.smokerCheckBox().check()
