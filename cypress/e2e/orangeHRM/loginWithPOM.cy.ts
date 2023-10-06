@@ -1,4 +1,4 @@
-import LoginHomePage from "../../support/loginHomePage";
+import LoginHomePage from "../../support/Page Object Models/loginHomePage";
 
 const loginHomePage: LoginHomePage= new LoginHomePage();
 let id : number ;

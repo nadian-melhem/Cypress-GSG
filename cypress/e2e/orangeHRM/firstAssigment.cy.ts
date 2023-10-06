@@ -1,8 +1,9 @@
-import LoginHomePage from "../../support/loginHomePage"
-import AddEmployeePage from "../../support/AddEmployeePage";
-import EmployeeDetailsPage from "../../support/EmployeeDetailsPage";
-import EmployeeListPage from "../../support/EmployeeListPage";
-import DashboardPage from "../../support/DashboardPage";
+import LoginHomePage from "../../support/Page Object Models/loginHomePage"
+import AddEmployeePage from "../../support/Page Object Models/AddEmployeePage";
+import EmployeeDetailsPage from "../../support/Page Object Models/EmployeeDetailsPage";
+import EmployeeListPage from "../../support/Page Object Models/EmployeeListPage";
+import DashboardPage from "../../support/Page Object Models/DashboardPage";
+import { StatusCode, addNewEmployee } from "../../support/Helpers/apiHelper";
 
 Cypress.on('uncaught:exception', (err, runnable) => {
     return false
@@ -39,26 +40,13 @@ describe("Add new employee", () => {
     })
 
 
-    it('check if the added employee exists', () => {
-        cy.get("@empInfo").then((employeeData: any) => {
-            cy.request({
-                method: 'Post',
-                url: 'web/index.php/api/v2/pim/employees',
-                body: {
-                    firstName: employeeData.firstName,
-                    middleName: employeeData.middleName,
-                    lastName: employeeData.lastName,
-                    empPicture: employeeData.empPicture,
-                    employeeId: employeeData.empId
-                }
-
-            }).then((response) => {
-                expect(response).property('status').to.equal(200)
-                dashboardPageObj.openPimPage()
-                employeeListPageObj.searchForEmployee(response.body.data.employeeId)
-                employeeListPageObj.checkTableResults(response.body.data.employeeId)
-            })
-            })
-
+    it('check if the added employee using API exists', () => {
+        addNewEmployee().then((response) => {
+            expect(response).property('status').to.equal(StatusCode.Success)
+            dashboardPageObj.openPimPage()
+            employeeListPageObj.searchForEmployee(response.body.data.employeeId)
+            employeeListPageObj.checkTableResults(response.body.data.employeeId)
         })
     })
+
+})
