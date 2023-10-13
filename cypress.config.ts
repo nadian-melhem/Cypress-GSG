@@ -14,7 +14,8 @@ module.exports = defineConfig({
       download_dir: "./cypress/downloads", 
       allure: true, 
       allureResulsPath: "allure-results", 
-      apiUrl: "web/index.php/api/v2/pim"
+      apiUrl: "web/index.php/api/v2/pim",
+      snapshotOnly: true
     }, 
  
     videosFolder: "allure-results/", 

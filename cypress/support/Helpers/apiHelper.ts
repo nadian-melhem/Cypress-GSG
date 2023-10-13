@@ -1,7 +1,12 @@
+import UserPayLoadInit from "../Initializers/UserPayloadInit"
 export enum StatusCode{
  Success = 200,
 }
-export function addNewEmployee() {
+export  const Urls ={
+    employees: `${Cypress.env("apiLogin")}/employees`
+}
+export class apiHelper{
+    static addNewEmployee() {
     return cy.fixture("employeeInfo").then(employeeData => {
         cy.request({
             method: 'Post',
@@ -16,4 +21,8 @@ export function addNewEmployee() {
 
         })
     })
+}
+static addNewEmployeeViaAPI() {
+    return cy.addNewEmployee(Urls.employees, UserPayLoadInit.inituser());
+}
 }
