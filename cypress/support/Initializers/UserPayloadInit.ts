@@ -1,16 +1,15 @@
 import { UserApiPayload } from "../API/Payload/UserApiPayload";
-import { faker } from '@faker-js/faker';
+//import { faker } from '@faker-js/faker';
 
 export default class UserPayLoadInit{
   static inituser(): UserApiPayload{
     let userDetails : UserApiPayload= {
-        user:{
-          firstName: faker.string.uuid(),
-          middleName: faker.string.uuid(),
-          lastName: faker.string.uuid(),
+          firstName: "nnnnnn",
+          middleName: "nmnmnmn",
+          lastName: "kkk",
           empPicture: null,
-          employeeId: faker.number.int().toString(),
-        }
+          employeeId: "14",
+       
     }
     return userDetails;
   }
