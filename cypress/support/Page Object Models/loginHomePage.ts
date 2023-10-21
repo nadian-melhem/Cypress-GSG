@@ -25,8 +25,8 @@ class LoginHomePage{
         this.elements.forgetPasswordMessage().should("contain","successfully")
     }
 
-    checkLoginResult(){
-        
+    verifyLoginsuccessfully(){
+        cy.url().should('eq', "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index")
     }
 
     
