@@ -1,14 +1,17 @@
 import CandidatePayloadInit from "../Initializers/CandidatePayloadInit";
+import LoginDetailsPayLoadInit from "../Initializers/LoginDetailsPayloadInit";
 import UserPayLoadInit from "../Initializers/UserPayloadInit"
 export enum StatusCode {
     Success = 200,
 }
 export const Urls = {
-    employees: '/web/index.php/api/v2/employees',
+    employees: '/web/index.php/api/v2/pim/employees',
+    users: '/web/index.php/api/v2/admin/users',
     viewCandidates: '/web/index.php/api/v2/recruitment/candidates?limit=50&offset=0&model=list&sortField=candidate.dateOfApplication&sortOrder=DESC',
     addCandidate: '/web/index.php/api/v2/recruitment/candidates',
     shortlistCandidate: '/web/index.php/api/v2/recruitment/candidates/',
-    viewCandidateProfile: '/web/index.php/recruitment/addCandidate/'
+    viewCandidateProfile: '/web/index.php/recruitment/addCandidate/',
+    logout: 'web/index.php/auth/logout'
 }
 export class apiHelper {
     static addNewEmployeeViaAPI() {
@@ -16,6 +19,14 @@ export class apiHelper {
             method: 'Post',
             url: Urls.employees,
             body: UserPayLoadInit.inituser()
+        })
+    }
+
+    static createLoginDetails(user){
+        return cy.request({
+            method: 'Post',
+            url: Urls.users,
+            body: user
         })
     }
 
@@ -31,7 +42,7 @@ export class apiHelper {
             url: Urls.addCandidate,
             body: CandidatePayloadInit.initCandidate()
         }).then((response) => {
-            return response.body.data.id
+            return response.body.data
         })
     }
 
@@ -47,6 +58,10 @@ export class apiHelper {
 
     static viewCandidatePageViaAPI(id: String) {
         return cy.visit(`${Urls.viewCandidateProfile}${id}`)
+    }
+
+    static logout(){
+        cy.visit(Urls.logout).wait(300)
     }
 
 

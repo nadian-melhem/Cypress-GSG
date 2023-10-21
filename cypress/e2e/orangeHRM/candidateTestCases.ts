@@ -5,6 +5,8 @@ import ScheduleInterviewPage from "../../support/Page Object Models/ScheduleInte
 import ViewCandidatePage from "../../support/Page Object Models/ViewCandidatePage";
 import LoginHomePage from "../../support/Page Object Models/loginHomePage";
 import { InterviewStatus } from "../../support/Helpers/uiHelper";
+import { searchForDataInTable } from "../../genericHelper/helperFunctions";
+import { AddCandidatePage } from "../../support/Page Object Models/AddCandidatePAge";
 Cypress.on('uncaught:exception', (err, runnable) => {
     return false
 })
@@ -15,6 +17,7 @@ describe("Tests for Candidates Tab", () => {
     const recruitmentPageObj: RecruitmentPage = new RecruitmentPage();
     const viewCandidatePageObj: ViewCandidatePage = new ViewCandidatePage();
     const scheduleInterviewPageObj: ScheduleInterviewPage = new ScheduleInterviewPage();
+    const addCandidatePageObj : AddCandidatePage = new AddCandidatePage()
 
     beforeEach(() => {
         cy.fixture("employeeInfo").as("empInfo")
@@ -32,10 +35,10 @@ describe("Tests for Candidates Tab", () => {
         });
     })
 
-    it.only("Verify Candidate status is 'Interview Scheduled' after the user added a candidate and change status to Shortlisted via api then change status to Interview Shceduled via UI", () => {
-        apiHelper.addCandidateViaAPI().then((candidateId) => {
-            apiHelper.shortListCandidateViaAPI(candidateId)
-            apiHelper.viewCandidatePageViaAPI(candidateId)
+    it("Verify Candidate status is 'Interview Scheduled' after the user added a candidate and change status to Shortlisted via api then change status to Interview Shceduled via UI", () => {
+        apiHelper.addCandidateViaAPI().then((response) => {
+            apiHelper.shortListCandidateViaAPI(response.id)
+            apiHelper.viewCandidatePageViaAPI(response.id)
             viewCandidatePageObj.scheduleInterview()
             cy.get("@interviewDetails").then((intDetails: any) => {
                 scheduleInterviewPageObj.fillInterviewDetails(intDetails.interviewTitle, intDetails.interviewer, intDetails.date)
@@ -43,8 +46,22 @@ describe("Tests for Candidates Tab", () => {
             scheduleInterviewPageObj.saveInterviewDetails()
             viewCandidatePageObj.verifyStatus(InterviewStatus.interviewScheduled)
         });
+    })
 
+    it("User added a candidate then searched for the added candidate of exists in candidates table", () =>{
+        apiHelper.addCandidateViaAPI().then((response) => {
+            searchForDataInTable(recruitmentPageObj.getCandidateTable, response)
+        })
 
+    })
+
+    it.only("add candidate using UI", () => {
+        cy.visit('/web/index.php/recruitment/addCandidate')
+        cy.fixture("candidateDetails").as("candidateInfo")
+        cy.get("@candidateInfo").then((candidateInfo: any) => {
+        addCandidatePageObj.addCandidate(candidateInfo.firstName, candidateInfo.lastName, candidateInfo.email, candidateInfo.resumePath)
+        addCandidatePageObj.verifyResumeUploaded(candidateInfo.resume)
+        })
 
     })
 
