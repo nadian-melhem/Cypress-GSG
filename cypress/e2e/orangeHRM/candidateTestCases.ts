@@ -6,7 +6,7 @@ import ViewCandidatePage from "../../support/Page Object Models/ViewCandidatePag
 import LoginHomePage from "../../support/Page Object Models/loginHomePage";
 import { InterviewStatus } from "../../support/Helpers/uiHelper";
 import { searchForDataInTable } from "../../genericHelper/helperFunctions";
-import { AddCandidatePage } from "../../support/Page Object Models/AddCandidatePAge";
+import { AddCandidatePage } from "../../support/Page Object Models/AddCandidatePage";
 Cypress.on('uncaught:exception', (err, runnable) => {
     return false
 })
