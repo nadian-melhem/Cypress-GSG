@@ -1,36 +1,23 @@
 import { CandidateApiPayload } from "../API/Payload/CandidateApiPayload"
 import { UserApiPayload } from "../API/Payload/UserApiPayload"
 import ViewCandidatePage from "../Page Object Models/ViewCandidatePage"
+import LoginHomePage from "../Page Object Models/loginHomePage"
 
 declare global {
     namespace Cypress {
-    interface Chainable<Subject>{
-        addNewEmployee: typeof addNewEmployee
-        interceptCandidateRecords: typeof interceptCandidateRecords
-        addCandidate: typeof addCandidate
+        interface Chainable<Subject> {
+            loginAsAdmin: typeof loginAsAdmin
+
+        }
     }
 }
-}
-
-function addNewEmployee(url: string, body: UserApiPayload){
-   return cy.request({
-    method:'Post',
-    url: this.url,
-    body: this.body
-   })
-}
-
-function interceptCandidateRecords(url: string){
-    return cy.intercept(url).as('interception').wait('@interception').then((interception) => {
-    }).its('body')
-}
-
-function addCandidate(url: string, body: CandidateApiPayload){{
-    return cy.request({
-        method:'Post',
-        url: url,
-        body:  body
-    }).then((response) => {
-        return response.body.data.id
+function loginAsAdmin() {
+    cy.fixture("employeeInfo").as("empInfo")
+    cy.visit('web/index.php/auth/login')
+    cy.get("@empInfo").then((employeeData: any) => {
+        LoginHomePage.login(employeeData.loginUser, employeeData.loginPassword)
     })
-}}
+}
+
+Cypress.Commands.add("loginAsAdmin", loginAsAdmin)
+

@@ -10,54 +10,42 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 
 
 describe("Final Automaton Task Test Cases", () => {
-    const loginPageObj: LoginHomePage = new LoginHomePage();
     const dashboardPageObj: DashboardPage = new DashboardPage();
-    const leavePageObj: LeavePage = new LeavePage() ;
+    const leavePageObj: LeavePage = new LeavePage();
     beforeEach(() => {
-        cy.fixture("employeeInfo").as("empInfo")
-        cy.visit('web/index.php/auth/login')
-        cy.get("@empInfo").then((employeeData: any) => {
-            loginPageObj.login(employeeData.loginUser, employeeData.loginPassword)
-        })
-
+        cy.loginAsAdmin()
     })
     it("add new employee to the system and apply a leave request,and the leave request is approve by the admin then the request status sholud appear as approved", () => {
         apiHelper.addNewEmployeeViaAPI().then((response) => {
-            const user = LoginDetailsPayLoadInit.inituser(response.body.data.empNumber)
-            apiHelper.createLoginDetails(user)
-            apiHelper.addEntitlement(user.empNumber)
+            const employee = LoginDetailsPayLoadInit.inituser(response.body.data.empNumber)
+            apiHelper.createLoginDetails(employee)
+            apiHelper.addEntitlement(employee.empNumber)
             dashboardPageObj.logout()
-            cy.intercept('web/index.php/auth/login')
-            loginPageObj.login(user.username, user.password)
-            apiHelper.applyLeaveRequest().then((response2) => {
-            dashboardPageObj.logout()
-            cy.fixture("employeeInfo").as("empInfo")
-            cy.visit('web/index.php/auth/login')
-            cy.get("@empInfo").then((employeeData: any) => {
-                loginPageObj.login(employeeData.loginUser, employeeData.loginPassword)
+            LoginHomePage.login(employee.username, employee.password)
+            apiHelper.applyLeaveRequest().then((leaveRequestResponse) => {
+                dashboardPageObj.logout()
+                cy.loginAsAdmin()
+                apiHelper.approveLeaveRequest(leaveRequestResponse.body.data.id)
+                dashboardPageObj.logout()
+                LoginHomePage.login(employee.username, employee.password)
+                dashboardPageObj.openLeavePage()
+                leavePageObj.checkLeaveStatus('Scheduled')
             })
-            apiHelper.approveLeaveRequest(response2.body.data.id)
-            dashboardPageObj.logout()
-            cy.intercept('web/index.php/auth/login')
-            loginPageObj.login(user.username, user.password)
-            dashboardPageObj.openLeavePage()
-            leavePageObj.checkLeaveStatus('Scheduled')
-        })
-         
+
         })
 
     })
 
 
-    it.only("", () => {
-        apiHelper.addVacancy().then((response) => {
-            const filePath = 'cypress/fixtures/nadianResume.pdf'
-            cy.visit('web/index.php/recruitment/addJobVacancy/' + response.body.data.id)
-            leavePageObj.addAtachment(filePath)
-            leavePageObj.verifyAtachmentIsAdded("nadian")
+    it.only("add a user and The added user add a vacancy and add an attachment then verify the atachment is added ", () => {
+        apiHelper.addNewEmployeeViaAPI().then((addEmployeeResponse) => {
+            apiHelper.addVacancy(addEmployeeResponse.body.data.empNumber).then((addVacancyResponse) => {
+                const filePath = 'cypress/fixtures/nadianResume.pdf'
+                cy.visit('web/index.php/recruitment/addJobVacancy/' + addVacancyResponse.body.data.id)
+                leavePageObj.addAtachment(filePath)
+                leavePageObj.verifyAtachmentIsAdded(filePath.replace(/^.*[\\/]/, ''))
+            })
         })
-
-
     })
 
 })

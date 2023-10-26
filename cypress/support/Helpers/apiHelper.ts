@@ -57,11 +57,7 @@ export class apiHelper {
             method: 'PUT',
             url: `${Urls.shortlistCandidate}${id}${"/shortlist"}`,
             body: {
-                firstName: employeeData.firstName,
-                middleName: employeeData.middleName,
-                lastName: employeeData.lastName,
-                empPicture: employeeData.empPicture,
-                employeeId: employeeData.empId
+                note: null
             }
 
         })
@@ -102,11 +98,11 @@ export class apiHelper {
 
     }
 
-    static addVacancy(){
+    static addVacancy(employeeId: number){
         return cy.request({
             method: "POST",
             url: Urls.addVacancy,
-            body: AddVacancyPayloadInit.initVacancy()
+            body: AddVacancyPayloadInit.initVacancy(employeeId)
         })
 
     }

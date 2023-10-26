@@ -1,4 +1,4 @@
-export interface addEntitlementPayload {
+export interface AddEntitlementPayload {
     empNumber: number,
     leaveTypeId: number,
     fromDate: string,

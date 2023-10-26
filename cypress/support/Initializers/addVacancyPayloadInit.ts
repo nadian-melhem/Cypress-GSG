@@ -1,14 +1,14 @@
-import { fa } from "@faker-js/faker";
+import { faker } from "@faker-js/faker";
 import AddVacancyPayload from "../API/Payload/AddVacancyPayload";
 
 export default class AddVacancyPayloadInit {
-    static initVacancy(): AddVacancyPayload {
+    static initVacancy(employeeId: AddVacancyPayload["employeeId"]): AddVacancyPayload {
         let vacancy: AddVacancyPayload = {
-            name: "string",
+            name: faker.internet.userName(),
             jobTitleId: 1,
-            employeeId: 2,
+            employeeId,
             numOfPositions: 3,
-            description: "string",
+            description: "",
             status: true,
             isPublished: false
         }
