@@ -1,5 +1,5 @@
-class LoginHomePage{
-    elements={
+class  LoginHomePage{
+    static elements={
         userName : () => cy.get('[placeholder="Username"]'),
         password : () => cy.get('[placeholder="Password"]'),
         usernameError: () => cy.get(':nth-child(2) > .oxd-input-group > .oxd-text')        ,
@@ -12,21 +12,21 @@ class LoginHomePage{
         forgetPasswordMessage: () => cy.get(".orangehrm-card-container"),
     }
 
-    login(userName: string, password: string){
+    static login(userName: string, password: string){
         this.elements.userName().type(userName)
         this.elements.password().type(password)
         this.elements.loginButton().click()
     }
 
-    forgetPassword(userName: string){
+    static forgetPassword(userName: string){
         this.elements.forgetPasswordLink().click();
         this.elements.userNameInForgetPasswordPage().type(userName)
         this.elements.resetButton().click()
         this.elements.forgetPasswordMessage().should("contain","successfully")
     }
 
-    checkLoginResult(){
-        
+    static verifyLoginsuccessfully(){
+        cy.url().should('eq', "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index")
     }
 
     
