@@ -6,18 +6,22 @@ import LoginHomePage from "../Page Object Models/loginHomePage"
 declare global {
     namespace Cypress {
         interface Chainable<Subject> {
-            loginAsAdmin: typeof loginAsAdmin
+            login: typeof login,
+            logout: typeof logout
 
         }
     }
 }
-function loginAsAdmin() {
-    cy.fixture("employeeInfo").as("empInfo")
+function login(username ?, password ?) {
     cy.visit('web/index.php/auth/login')
-    cy.get("@empInfo").then((employeeData: any) => {
-        LoginHomePage.login(employeeData.loginUser, employeeData.loginPassword)
-    })
+    LoginHomePage.login(username, password)
+}
+function logout(){
+    cy.get('.oxd-userdropdown-tab > .oxd-icon').click()
+    cy.get(':nth-child(4) > .oxd-userdropdown-link').click()
 }
 
-Cypress.Commands.add("loginAsAdmin", loginAsAdmin)
+
+Cypress.Commands.add("login", login)
+Cypress.Commands.add("logout", logout)
 

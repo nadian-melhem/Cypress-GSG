@@ -17,14 +17,17 @@ export const Urls = {
     addEntitlement: '/web/index.php/api/v2/leave/leave-entitlements',
     applyLeaveRequest: 'web/index.php/api/v2/leave/leave-requests',
     approveLeaveRequest: 'web/index.php/api/v2/leave/employees/leave-requests/',
-    addVacancy: 'web/index.php/api/v2/recruitment/vacancies'
+    addVacancy: 'web/index.php/api/v2/recruitment/vacancies',
+    addTimeSheet: 'web/index.php/api/v2/time/timesheets/',
+    getTimeSheetId: 'web/index.php/api/v2/time/timesheets/default?date=2023-10-28',
+    submitTimeSheet: '/web/index.php/api/v2/time/timesheets/'
 }
 export class apiHelper {
-    static addNewEmployeeViaAPI() {
+    static addNewEmployeeViaAPI(emplooyee) {
         return cy.request({
             method: 'Post',
             url: Urls.employees,
-            body: UserPayLoadInit.inituser()
+            body: emplooyee
         })
     }
 
@@ -105,6 +108,69 @@ export class apiHelper {
             body: AddVacancyPayloadInit.initVacancy(employeeId)
         })
 
+    }
+
+    static getDefaultTimeSheetId(){
+        return cy.request({
+            method:"GET",
+            url: Urls.getTimeSheetId
+        })
+
+    }
+
+    static addTimeSheet(id){
+        return cy.request({
+            method: "PUT",
+            url : Urls.addTimeSheet + id +'/entries' ,
+            body: {
+                "entries": [
+                  {
+                    "projectId": 2,
+                    "activityId": 12,
+                    "dates": {
+                      "2023-10-23": {
+                        "duration": "05:00"
+                      },
+                      "2023-10-24": {
+                        "duration": "05:00"
+                      },
+                      "2023-10-25": {
+                        "duration": "05:00"
+                      },
+                      "2023-10-26": {
+                        "duration": "05:00"
+                      },
+                      "2023-10-27": {
+                        "duration": "05:00"
+                      },
+                      "2023-10-28": {
+                        "duration": "05:00"
+                      },
+                      "2023-10-29": {
+                        "duration": "05:00"
+                      }
+                    }
+                  }
+                ],
+                "deletedEntries": [
+                  {
+                    "projectId": 3,
+                    "activityId": 19
+                  }
+                ]
+              }
+        })
+
+    }
+
+    static submitTimeSheet(id){
+        return cy.request({
+            method: 'PUT',
+            url: Urls.submitTimeSheet + id,
+            body: {
+                action:"SUBMIT"
+            }
+        })
     }
 
 

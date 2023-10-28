@@ -17,9 +17,5 @@ class DashboardPage{
         this.elements.MainMenuItems().contains('Leave').click();
     }
 
-    logout(){
-        this.elements.userIcon().click()
-        this.elements.logout().click()
-    }
 }
 export default DashboardPage
