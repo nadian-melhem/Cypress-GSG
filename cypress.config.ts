@@ -7,6 +7,7 @@ module.exports = defineConfig({
     baseUrl: "https://opensource-demo.orangehrmlive.com", 
     setupNodeEvents(on, config) { 
       allureWriter(on, config); 
+      require('@cypress/grep/src/plugin')(config)
       return config; 
     }, 
     env: { 
@@ -14,7 +15,8 @@ module.exports = defineConfig({
       download_dir: "./cypress/downloads", 
       allure: true, 
       allureResulsPath: "allure-results", 
-      apiUrl: "web/index.php/api/v2/pim"
+      apiUrl: "web/index.php/api/v2/",
+      snapshotOnly: true,
     }, 
  
     videosFolder: "allure-results/", 
