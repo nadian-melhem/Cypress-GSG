@@ -16,6 +16,9 @@ class DashboardPage{
     openLeavePage(){
         this.elements.MainMenuItems().contains('Leave').click();
     }
+    openBuzzPage(){
+        this.elements.MainMenuItems().contains('Buzz').click();
+    }
 
 }
 export default DashboardPage
